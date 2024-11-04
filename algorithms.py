@@ -20,30 +20,30 @@ while True:
             }
         for o in products:
             if o['name'] == users['product']:
-                client.append(users['product'])
+                # client.append(users['product'])
+                client = users['product']
                 new = {
                     'buy_count': int(input('sotib olinuvchi mahsulot soni(hajmi): '))
                     }
                 if new['buy_count'] <= o['soni']:
                     o['soni'] -= new['buy_count']
                     o['total'] +=  new['buy_count']
-                    client.append(new['buy_count'])
-                    for i in client:
-                        # print(f'{i['product']} savatga solindi!\njami narxi: {i['buy_count']}')
-                        print(i)
+                    # client.append(new['buy_count'])
+                    client = new['buy_count']
+                    # for i in client:
+                    print(f'{client['product']} savatga solindi!\njami narxi: {i['buy_count']}')
                 else:
                     new >= o['soni']
                     print('sorry there is not enough products!')                 
           
     elif command == '/rasmiylashtirish':
         emails.append(input('email pochtangizni kirgazing: '))   
-        print(client) 
+        # print(client) 
 
     elif command == '/products':
          for i in client:
-            # print(f'{i['product']} savatga solindi!\njami narxi: {i['buy_count']}')
+            print(f'{i['product']} savatga solindi!\njami narxi: {i['buy_count']}')
             # need to make client variable dict to make code above work
-            print(i)
 
     elif command == '/payment':
         print('tolov uslubini tanlang! ')

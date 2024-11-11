@@ -103,58 +103,58 @@
 
 
 
-def get_fractions(fraction1, fraction2):
+# def get_fractions(fraction1, fraction2):
     
 
-    numerator1, denominator1 = map(int, fraction1.split('/'))
-    numerator2, denominator2 = map(int, fraction2.split('/'))
-    total_numerator = numerator1 + numerator2
-    total_denominator = denominator1 + denominator2
+#     numerator1, denominator1 = map(int, fraction1.split('/'))
+#     numerator2, denominator2 = map(int, fraction2.split('/'))
+#     total_numerator = numerator1 + numerator2
+#     total_denominator = denominator1 + denominator2
 
-    if denominator1 == denominator2 or numerator1 == numerator2:
-        if denominator2 == denominator1:
-            return f"{fraction1} + {fraction2} = {total_numerator}/{denominator1}"
+#     if denominator1 == denominator2 or numerator1 == numerator2:
+#         if denominator2 == denominator1:
+#             return f"{fraction1} + {fraction2} = {total_numerator}/{denominator1}"
 
-        else:
-            numerator1 == numerator2
-            return f"{fraction1} + {fraction2} = {numerator1}/{total_denominator}"
+#         else:
+#             numerator1 == numerator2
+#             return f"{fraction1} + {fraction2} = {numerator1}/{total_denominator}"
         
-    return f"{fraction1} + {fraction2} = {total_numerator}/{total_denominator}"
+#     return f"{fraction1} + {fraction2} = {total_numerator}/{total_denominator}"
 
-# a_b = '3/7'
-# c_b = '4/3'
-# result = get_fractions(a_b, c_b)
-# print(result)  
+# # a_b = '3/7'
+# # c_b = '4/3'
+# # result = get_fractions(a_b, c_b)
+# # print(result)  
 
-def replacer(s: str) -> str:
-    """
-    Add your code here
-    """
-    return s.replace('"', "'").replace("'", '"')
+# def replacer(s: str) -> str:
+#     """
+#     Add your code here
+#     """
+#     return s.replace('"', "'").replace("'", '"')
 
-# hi = replacer("nono'mb")
-# print(hi)
+# # hi = replacer("nono'mb")
+# # print(hi)
 
 
-def is_palindrome(string):
+# def is_palindrome(string):
    
-    left = 0
-    right = len(string) - 1
+#     left = 0
+#     right = len(string) - 1
 
-    while left < right:
-        if string[left] != string[right]:
-            return False
-        left += 1
-        right -= 1
+#     while left < right:
+#         if string[left] != string[right]:
+#             return False
+#         left += 1
+#         right -= 1
 
-    return True
+#     return True
 
-# Example usage:
-word = "racecar"
-print(is_palindrome(word))  # Output: True
+# # Example usage:
+# word = "racecar"
+# print(is_palindrome(word))  # Output: True
 
-word = "hello"
-print(is_palindrome(word))  # Output: False
+# word = "hello"
+# print(is_palindrome(word))  # Output: False
 
 
 

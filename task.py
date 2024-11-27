@@ -311,3 +311,228 @@ nums = [3, 2, 1]
 result = foo(nums)
 # print(result)  
 
+
+
+
+
+
+
+# inputs = ['000', '001', '010', '011', '100', '101']
+
+# shift_register_size = 4
+
+# def shift_register_simulation(inputs, seconds, shift_register_size):
+#     register = [0] * shift_register_size
+#     time = 0
+#     result = []
+
+#     for input_value in inputs:
+#         bits = [int(bit) for bit in input_value]
+
+#         for bit in bits:
+#             register.pop(0)
+#             register.append(bit)
+
+#             if time in seconds:
+#                 result.append(register[2])
+
+#             time += 1
+
+#     return result
+
+# seconds_to_check = [7, 9, 12, 14]
+
+# output_bits = shift_register_simulation(inputs, seconds_to_check, shift_register_size)
+
+# print("State of  C-element at the time: ", output_bits)
+
+
+
+
+# numbers = [1, 2, 3, 2, 1, 2, 4, 5, 4, 3, 2, 1, 1]
+ 
+# frequency_dict = {}
+ 
+# for num in numbers:
+#     if num in frequency_dict:
+#         frequency_dict[num] += 1
+#     else:
+#         frequency_dict[num] = 1
+ 
+# # print("Frequency dictionary:")
+# # print(frequency_dict)
+
+
+
+# glass = [
+#     ['H', 'H', 'W', 'O'],
+#     ['W', 'W', 'O', 'W'],
+#     ['H', 'H', 'O', 'O']
+# ]
+# density_chart = {'O': 0.80, 'A': 0.87, 'W': 1.00, 'H': 1.36}
+ 
+# flattened_glass = []
+# for row in glass:
+#     for item in row:
+#         flattened_glass.append(item)
+ 
+# for i in range(len(flattened_glass)):
+#     for j in range(i + 1, len(flattened_glass)):
+#         if density_chart[flattened_glass[i]] > density_chart[flattened_glass[j]]:
+#             flattened_glass[i], flattened_glass[j] = flattened_glass[j], flattened_glass[i]
+# rows = len(glass)
+# cols = len(glass[0])
+ 
+# sorted_glass = []
+# index = 0
+# for i in range(rows):
+#     row = []
+#     for j in range(cols):
+#         row.append(flattened_glass[index])
+#         index += 1
+#     sorted_glass.append(row)
+ 
+# for row in sorted_glass:
+    # print(row)
+
+
+
+
+
+
+# matrix = []
+# while True:
+#     line = input().strip()
+#     if line == "end":
+#         break
+#     row = [int(item) for item in line.split()]
+#     matrix.append(row)
+ 
+# rows = len(matrix)
+# cols = len(matrix[0])
+# result = [[0] * cols for _ in range(rows)]
+ 
+# for i in range(rows):
+#     for j in range(cols):
+#         total_sum = 0
+#         total_sum += matrix[i - 1][j] if i > 0 else matrix[rows - 1][j]
+#         total_sum += matrix[(i + 1) % rows][j]
+#         total_sum += matrix[i][j - 1] if j > 0 else matrix[i][cols - 1]
+#         total_sum += matrix[i][(j + 1) % cols]
+ 
+#         result[i][j] = total_sum
+ 
+# for row in result:
+    # print(" ".join(map(str, row)))
+
+
+
+
+# n = int(input().strip())
+# matrix = [[0] * n for _ in range(n)]
+ 
+# top, bottom, left, right = 0, n - 1, 0, n - 1
+# direction = 0  # 0: right, 1: down, 2: left, 3: up
+# num = 1
+ 
+# while num <= n * n:
+#     if direction == 0:  # Moving right
+#         for i in range(left, right + 1):
+#             matrix[top][i] = num
+#             num += 1
+#         top += 1
+#     elif direction == 1:  # Moving down
+#         for i in range(top, bottom + 1):
+#             matrix[i][right] = num
+#             num += 1
+#         right -= 1
+#     elif direction == 2:  # Moving left
+#         for i in range(right, left - 1, -1):
+#             matrix[bottom][i] = num
+#             num += 1
+#         bottom -= 1
+#     elif direction == 3:  # Moving up
+#         for i in range(bottom, top - 1, -1):
+#             matrix[i][left] = num
+#             num += 1
+#         left += 1
+ 
+#     direction = (direction + 1) % 4
+ 
+# for row in matrix:
+#     print(" ".join(map(str, row)))
+
+
+
+
+
+def get_tuple(num: int):
+    string = str(num)
+    listed = []
+    for i in string:
+        integer = int(i)
+        listed.append(integer)
+    converted = tuple(listed)
+    return converted
+
+
+# print(get_tuple(87178291199))
+
+
+
+def get_pairs(lst: list):
+    pairs = []
+    for i in range(len(lst) - 1):
+        pair = (lst[i], lst[i + 1])
+        pairs.append(pair)
+    return pairs
+
+
+# print(get_pairs([1, 2, 3, 8, 9]))
+# print(get_pairs(['need', 'to', 'sleep', 'more']))
+
+
+
+def get_dict(s: str):
+    char_freq = {}
+    for char in s.lower():
+        char_freq[char] = char_freq.get(char, 0) + 1
+    return char_freq 
+
+# print(get_dict('Oh, it is python'))
+
+
+
+
+from typing import Any, Dict, List, Set
+
+def check(lst: List[Dict[Any, Any]]) -> Set[Any]:
+    dct = {}
+    for i in lst:
+        for k, v in i.items():
+            dct[v] = dct.get(k, v)
+    sett = set(dct)
+    return sett 
+
+# print(check([{"V":"S001"}, {"V": "S002"}, {"VI": "S001"}, {"VI": "S005"}, {"VII":"S005"}, {"V":"S009"},{"VIII":"S007"}]))
+
+
+
+
+
+def multiplication_table(row_start, row_end, column_start, column_end):
+    table = []
+    for row in range(row_start, row_end + 1):
+        row_list = []
+        for col in range(column_start, column_end + 1):
+            product = row * col
+            row_list.append(product)
+        table.append(row_list)
+
+    print(table)
+
+row_start = 2
+row_end = 4
+column_start = 3
+column_end = 7
+multiplication_table(row_start, row_end, column_start, column_end)

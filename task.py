@@ -538,101 +538,144 @@ def check(lst: List[Dict[Any, Any]]) -> Set[Any]:
 # multiplication_table(row_start, row_end, column_start, column_end)
 
 
-# Function to find the Checksum of Sent Message
-def findChecksum(SentMessage, k):
+# # Function to find the Checksum of Sent Message
+# def findChecksum(SentMessage, k):
 
-	# Dividing sent message in packets of k bits.
-	c1 = SentMessage[0:k]
-	c2 = SentMessage[k:2*k]
-	c3 = SentMessage[2*k:3*k]
-	c4 = SentMessage[3*k:4*k]
+# 	# Dividing sent message in packets of k bits.
+# 	c1 = SentMessage[0:k]
+# 	c2 = SentMessage[k:2*k]
+# 	c3 = SentMessage[2*k:3*k]
+# 	c4 = SentMessage[3*k:4*k]
 
-	# Calculating the binary sum of packets
-	Sum = bin(int(c1, 2)+int(c2, 2)+int(c3, 2)+int(c4, 2))[2:]
+# 	# Calculating the binary sum of packets
+# 	Sum = bin(int(c1, 2)+int(c2, 2)+int(c3, 2)+int(c4, 2))[2:]
 
-	# Adding the overflow bits
-	if(len(Sum) > k):
-		x = len(Sum)-k
-		Sum = bin(int(Sum[0:x], 2)+int(Sum[x:], 2))[2:]
-	if(len(Sum) < k):
-		Sum = '0'*(k-len(Sum))+Sum
+# 	# Adding the overflow bits
+# 	if(len(Sum) > k):
+# 		x = len(Sum)-k
+# 		Sum = bin(int(Sum[0:x], 2)+int(Sum[x:], 2))[2:]
+# 	if(len(Sum) < k):
+# 		Sum = '0'*(k-len(Sum))+Sum
 
-	# Calculating the complement of sum
-	Checksum = ''
-	for i in Sum:
-		if(i == '1'):
-			Checksum += '0'
-		else:
-			Checksum += '1'
-	return Checksum
+# 	# Calculating the complement of sum
+# 	Checksum = ''
+# 	for i in Sum:
+# 		if(i == '1'):
+# 			Checksum += '0'
+# 		else:
+# 			Checksum += '1'
+# 	return Checksum
 
-# Function to find the Complement of binary addition of
-# k bit packets of the Received Message + Checksum
-def checkReceiverChecksum(ReceivedMessage, k, Checksum):
+# # Function to find the Complement of binary addition of
+# # k bit packets of the Received Message + Checksum
+# def checkReceiverChecksum(ReceivedMessage, k, Checksum):
 
-	# Dividing sent message in packets of k bits.
-	c1 = ReceivedMessage[0:k]
-	c2 = ReceivedMessage[k:2*k]
-	c3 = ReceivedMessage[2*k:3*k]
-	c4 = ReceivedMessage[3*k:4*k]
+# 	# Dividing sent message in packets of k bits.
+# 	c1 = ReceivedMessage[0:k]
+# 	c2 = ReceivedMessage[k:2*k]
+# 	c3 = ReceivedMessage[2*k:3*k]
+# 	c4 = ReceivedMessage[3*k:4*k]
 
-	# Calculating the binary sum of packets + checksum
-	ReceiverSum = bin(int(c1, 2)+int(c2, 2)+int(Checksum, 2) +
-					int(c3, 2)+int(c4, 2)+int(Checksum, 2))[2:]
+# 	# Calculating the binary sum of packets + checksum
+# 	ReceiverSum = bin(int(c1, 2)+int(c2, 2)+int(Checksum, 2) +
+# 					int(c3, 2)+int(c4, 2)+int(Checksum, 2))[2:]
 
-	# Adding the overflow bits
-	if(len(ReceiverSum) > k):
-		x = len(ReceiverSum)-k
-		ReceiverSum = bin(int(ReceiverSum[0:x], 2)+int(ReceiverSum[x:], 2))[2:]
+# 	# Adding the overflow bits
+# 	if(len(ReceiverSum) > k):
+# 		x = len(ReceiverSum)-k
+# 		ReceiverSum = bin(int(ReceiverSum[0:x], 2)+int(ReceiverSum[x:], 2))[2:]
 
-	# Calculating the complement of sum
-	ReceiverChecksum = ''
-	for i in ReceiverSum:
-		if(i == '1'):
-			ReceiverChecksum += '0'
-		else:
-			ReceiverChecksum += '1'
-	return ReceiverChecksum
+# 	# Calculating the complement of sum
+# 	ReceiverChecksum = ''
+# 	for i in ReceiverSum:
+# 		if(i == '1'):
+# 			ReceiverChecksum += '0'
+# 		else:
+# 			ReceiverChecksum += '1'
+# 	return ReceiverChecksum
 
-# 00000001000000100000010000001000
-# 10000001011000100001000100001000
-# 10011001001101110110001101100100
-# 10101111000011111011001010010011
+# # 00000001000000100000010000001000
+# # 10000001011000100001000100001000
+# # 10011001001101110110001101100100
+# # 10101111000011111011001010010011
 
 
-# Driver Code
-SentMessage = "10101111000011111011001010010011"
-k = 8
-#ReceivedMessage = "10000101011000111001010011101101"
-ReceivedMessage = "10101111000011111011001010010011"
-# Calling the findChecksum() function
-Checksum = findChecksum(SentMessage, k)
+# # Driver Code
+# SentMessage = "10101111000011111011001010010011"
+# k = 8
+# #ReceivedMessage = "10000101011000111001010011101101"
+# ReceivedMessage = "10101111000011111011001010010011"
+# # Calling the findChecksum() function
+# Checksum = findChecksum(SentMessage, k)
 
-# Calling the checkReceiverChecksum() function
-ReceiverChecksum = checkReceiverChecksum(ReceivedMessage, k, Checksum)
+# # Calling the checkReceiverChecksum() function
+# ReceiverChecksum = checkReceiverChecksum(ReceivedMessage, k, Checksum)
 
-# Printing Checksum
-print("SENDER SIDE CHECKSUM: ", Checksum)
-print("RECEIVER SIDE CHECKSUM: ", ReceiverChecksum)
-finalsum=bin(int(Checksum,2)+int(ReceiverChecksum,2))[2:]
+# # Printing Checksum
+# print("SENDER SIDE CHECKSUM: ", Checksum)
+# print("RECEIVER SIDE CHECKSUM: ", ReceiverChecksum)
+# finalsum=bin(int(Checksum,2)+int(ReceiverChecksum,2))[2:]
 
-# Finding the sum of checksum and received checksum
-finalcomp=''
-for i in finalsum:
-	if(i == '1'):
-		finalcomp += '0'
-	else:
-		finalcomp += '1'
+# # Finding the sum of checksum and received checksum
+# finalcomp=''
+# for i in finalsum:
+# 	if(i == '1'):
+# 		finalcomp += '0'
+# 	else:
+# 		finalcomp += '1'
 
-# If sum = 0, No error is detected
-if(int(finalcomp,2) == 0):
-	print("Receiver Checksum is equal to 0. Therefore,")
-	print("STATUS: ACCEPTED")
+# # If sum = 0, No error is detected
+# if(int(finalcomp,2) == 0):
+# 	print("Receiver Checksum is equal to 0. Therefore,")
+# 	print("STATUS: ACCEPTED")
 	
-# Otherwise, Error is detected
-else:
-	print("Receiver Checksum is not equal to 0. Therefore,")
-	print("STATUS: ERROR DETECTED")
+# # Otherwise, Error is detected
+# else:
+# 	print("Receiver Checksum is not equal to 0. Therefore,")
+# 	print("STATUS: ERROR DETECTED")
 
 
 
+
+
+a = [-4, 4, 5, -1, -2, 4, 7, -9]
+# print(list(map(abs, a))) 
+
+import numpy 
+
+a = numpy.array([-4, 4, 5, -1, -2, 4, 7, -9])
+sorted = numpy.abs(a)
+# print(sorted) 
+   
+
+number = [0, 3, 2, 0, 1, 0, 0, 4, 5]
+no_zero = []
+zero = []
+
+for num in number:
+    if num != 0:
+        no_zero.append(num)
+    else:
+        zero.append(num)
+
+no_zero.reverse()
+result = no_zero + zero
+# print(result) 
+
+
+
+fixed = []
+appended = []
+half_append = []
+user = int(input('enter the number of loop: '))
+
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+appended.append(nums[:user])
+half_append.append(nums[user:])
+
+appends_added = half_append + appended
+for i in appends_added:
+    for j in i:
+        fixed.append(j)
+# print(fixed)

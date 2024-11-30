@@ -266,49 +266,49 @@ def sort_unique_elements(str_list: Tuple[str]) -> List[str]:
 
 
 
-from typing import Union, List
+# from typing import Union, List
 
-ListType = List[Union[int, str]]
+# ListType = List[Union[int, str]]
 
 
-def get_fizzbuzz_list(n: int) -> ListType:
-    result = []
-    for num in range(1, n + 1):
-      if num % 15 == 0:
-        result.append("FizzBuzz")
-      elif num % 3 == 0:
-        result.append("Fizz")
-      elif num % 5 == 0:
-        result.append("Buzz")
-      else:
-        result.append(num) 
+# def get_fizzbuzz_list(n: int) -> ListType:
+#     result = []
+#     for num in range(1, n + 1):
+#       if num % 15 == 0:
+#         result.append("FizzBuzz")
+#       elif num % 3 == 0:
+#         result.append("Fizz")
+#       elif num % 5 == 0:
+#         result.append("Buzz")
+#       else:
+#         result.append(num) 
   
-    return result
+#     return result
 
-n = 16
-fizzbuzz_list = get_fizzbuzz_list(n)
+# n = 16
+# fizzbuzz_list = get_fizzbuzz_list(n)
 # print(fizzbuzz_list)
 
 
 
-def foo(nums):
+# def foo(nums):
 
-    if not nums:
-        return []
+#     if not nums:
+#         return []
 
-    total_product = 1
-    for num in nums:
-        total_product *= num
+#     total_product = 1
+#     for num in nums:
+#         total_product *= num
 
-    result = []
-    for num in nums:
-        result.append(total_product // num)
+#     result = []
+#     for num in nums:
+#         result.append(total_product // num)
 
-    return result
+#     return result
 
 
-nums = [3, 2, 1]
-result = foo(nums)
+# nums = [3, 2, 1]
+# result = foo(nums)
 # print(result)  
 
 
@@ -466,26 +466,26 @@ result = foo(nums)
 
 
 
-def get_tuple(num: int):
-    string = str(num)
-    listed = []
-    for i in string:
-        integer = int(i)
-        listed.append(integer)
-    converted = tuple(listed)
-    return converted
+# def get_tuple(num: int):
+#     string = str(num)
+#     listed = []
+#     for i in string:
+#         integer = int(i)
+#         listed.append(integer)
+#     converted = tuple(listed)
+#     return converted
 
 
 # print(get_tuple(87178291199))
 
 
 
-def get_pairs(lst: list):
-    pairs = []
-    for i in range(len(lst) - 1):
-        pair = (lst[i], lst[i + 1])
-        pairs.append(pair)
-    return pairs
+# def get_pairs(lst: list):
+#     pairs = []
+#     for i in range(len(lst) - 1):
+#         pair = (lst[i], lst[i + 1])
+#         pairs.append(pair)
+#     return pairs
 
 
 # print(get_pairs([1, 2, 3, 8, 9]))
@@ -493,26 +493,26 @@ def get_pairs(lst: list):
 
 
 
-def get_dict(s: str):
-    char_freq = {}
-    for char in s.lower():
-        char_freq[char] = char_freq.get(char, 0) + 1
-    return char_freq 
+# def get_dict(s: str):
+#     char_freq = {}
+#     for char in s.lower():
+#         char_freq[char] = char_freq.get(char, 0) + 1
+#     return char_freq 
 
 # print(get_dict('Oh, it is python'))
 
 
 
 
-from typing import Any, Dict, List, Set
+# from typing import Any, Dict, List, Set
 
-def check(lst: List[Dict[Any, Any]]) -> Set[Any]:
-    dct = {}
-    for i in lst:
-        for k, v in i.items():
-            dct[v] = dct.get(k, v)
-    sett = set(dct)
-    return sett 
+# def check(lst: List[Dict[Any, Any]]) -> Set[Any]:
+#     dct = {}
+#     for i in lst:
+#         for k, v in i.items():
+#             dct[v] = dct.get(k, v)
+#     sett = set(dct)
+#     return sett 
 
 # print(check([{"V":"S001"}, {"V": "S002"}, {"VI": "S001"}, {"VI": "S005"}, {"VII":"S005"}, {"V":"S009"},{"VIII":"S007"}]))
 
@@ -638,44 +638,63 @@ def check(lst: List[Dict[Any, Any]]) -> Set[Any]:
 
 
 
-a = [-4, 4, 5, -1, -2, 4, 7, -9]
-# print(list(map(abs, a))) 
+# a = [-4, 4, 5, -1, -2, 4, 7, -9]
+# # print(list(map(abs, a))) 
 
-import numpy 
+# import numpy 
 
-a = numpy.array([-4, 4, 5, -1, -2, 4, 7, -9])
-sorted = numpy.abs(a)
-# print(sorted) 
+# a = numpy.array([-4, 4, 5, -1, -2, 4, 7, -9])
+# sorted = numpy.abs(a)
+# # print(sorted) 
    
 
-number = [0, 3, 2, 0, 1, 0, 0, 4, 5]
-no_zero = []
-zero = []
+# number = [0, 3, 2, 0, 1, 0, 0, 4, 5]
+# no_zero = []
+# zero = []
 
-for num in number:
-    if num != 0:
-        no_zero.append(num)
-    else:
-        zero.append(num)
+# for num in number:
+#     if num != 0:
+#         no_zero.append(num)
+#     else:
+#         zero.append(num)
 
-no_zero.reverse()
-result = no_zero + zero
+# no_zero.reverse()
+# result = no_zero + zero
 # print(result) 
 
 
 
-fixed = []
-appended = []
-half_append = []
-user = int(input('enter the number of loop: '))
+# fixed = []
+# appended = []
+# half_append = []
+# # user = int(input('enter the number of loop: '))
 
-nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+# nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-appended.append(nums[:user])
-half_append.append(nums[user:])
+# appended.append(nums[:user])
+# half_append.append(nums[user:])
 
-appends_added = half_append + appended
-for i in appends_added:
-    for j in i:
-        fixed.append(j)
+# appends_added = half_append + appended
+# for i in appends_added:
+#     for j in i:
+#         fixed.append(j)
 # print(fixed)
+
+
+
+# def move_zeros_to_end(numbers):
+#   output = numbers.copy()  
+#   left, right = 0, len(output) - 1
+
+#   while left < right:
+#     if output[left] == 0:
+#       while left < right and output[right] == 0:
+#         right -= 1
+#       output[left], output[right] = output[right], output[left]
+#     left += 1
+
+#   return output
+
+# number = [0, 3, 2, 0, 1, 0, 0, 4, 5]
+# result = move_zeros_to_end(number)
+# print(result) 

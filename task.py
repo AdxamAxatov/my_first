@@ -641,12 +641,7 @@ def sort_unique_elements(str_list: Tuple[str]) -> List[str]:
 # a = [-4, 4, 5, -1, -2, 4, 7, -9]
 # # print(list(map(abs, a))) 
 
-# import numpy 
 
-# a = numpy.array([-4, 4, 5, -1, -2, 4, 7, -9])
-# sorted = numpy.abs(a)
-# # print(sorted) 
-   
 
 # number = [0, 3, 2, 0, 1, 0, 0, 4, 5]
 # no_zero = []
@@ -698,3 +693,53 @@ def sort_unique_elements(str_list: Tuple[str]) -> List[str]:
 # number = [0, 3, 2, 0, 1, 0, 0, 4, 5]
 # result = move_zeros_to_end(number)
 # print(result) 
+
+
+
+
+# abs(int)
+# nums = [-4, 4, 5, -1, 2, 6, -9]
+# for i in range(len(nums)):
+#     nums[i] = nums[i] ** 2
+#     nums[i] = abs(nums[i] ** 2)
+# print(sorted(nums))
+
+
+
+# nums = [0, 3, 5, 2, 0, 0, 6, 9]
+# nums = list(filter(lambda a: a != 0, nums)) + list(filter(lambda a: a == 0, nums))
+# print(nums)
+
+# count = 0
+# for i, num in enumerate(nums):
+#     if num == 0:
+#         count += 1
+#         continue
+#     nums[i], nums[i-count] = nums[i-count], nums[i]
+# print(nums)
+
+
+
+def reverse(nums: list[int], i, j):
+    while i < j:
+        nums[i], nums[j] = nums[j], nums[i]
+        i += 1
+        j -= 1
+
+def rotate(nums: list[int], k: int):
+    k = k % len(nums)
+    reverse(nums, 0, len(nums)-1)
+# [1,2,3,4,5,6,7]
+# [7,2,3,4,5,6,1]
+# [7,6,3,4,5,2,1]
+# [7,6,5,4,3,2,1]
+    reverse(nums, 0, k-1)
+# [5,6,7,4,3,2,1]
+    reverse(nums, k, len(nums)-1)
+# [5,6,7,4,3,2,1]
+# [5,6,7,1,3,2,4]
+# [5,6,7,1,2,3,4]
+    return nums
+
+nums = [1,2,3,4,5,6,7] # nums = [5,6,7,1,2,3,4]
+print(rotate(nums=nums, k=3))

@@ -741,5 +741,38 @@ def rotate(nums: list[int], k: int):
 # [5,6,7,1,2,3,4]
     return nums
 
-nums = [1,2,3,4,5,6,7] # nums = [5,6,7,1,2,3,4]
-print(rotate(nums=nums, k=3))
+# nums = [1,2,3,4,5,6,7] # nums = [5,6,7,1,2,3,4]
+# print(rotate(nums=nums, k=3))
+
+
+
+def square(num):
+    dct = {}
+    for i in range(1, num + 1):
+        dct[i] = i * i 
+
+    return dct
+
+# print(square(5))
+
+
+
+def union(*args) -> set:
+    result = set()
+    for i in args:
+        if args:
+            result = result.union(i)
+
+    return result
+
+# print(union(('S', 'A', 'M'), ['S', 'P', 'A', 'C']))
+
+def intersect(*args) -> set:
+    result = set(args[0])
+    for i in args[1:]:
+        if args:
+            result = result.intersection(i)
+
+    return result
+
+# print(intersect(('S', 'A', 'C'), ('P', 'C', 'S'), ('G', 'H', 'S', 'C')))

@@ -776,3 +776,74 @@ def intersect(*args) -> set:
     return result
 
 # print(intersect(('S', 'A', 'C'), ('P', 'C', 'S'), ('G', 'H', 'S', 'C')))
+
+
+# print(2**32)
+# print(58503978996815 % 2**32)
+# print(60878229962 % 2**32)
+# print(60878229962 % 4294967296)
+
+def hi():
+    print(2**32)
+    return 60878229962 > 2**32-1
+# print(hi())
+# print(ord('A'))
+
+
+
+def hash_function(text):
+    h = 0
+    for char in text:
+        h = (31 * h + ord(char)) % (2**32)
+    return h
+
+# text = "Algorithm"
+# hash_value = hash_function(text)
+# print(hex(hash_value)) 
+# print(hash_value)  
+
+
+
+def decimal_to_hexadecimal(decimal_num):
+  if decimal_num == 0:
+    return '0'
+
+  hex_digits = []
+  while decimal_num > 0:
+    remainder = decimal_num % 16
+    hex_digits.append(hex(remainder)[2:].upper())
+    decimal_num //= 16
+
+  hex_digits.reverse()
+  return ''.join(hex_digits)
+
+# decimal_number = 100000100000111010000011000011010000000110000011000011000000001010000011000010110000001110000011000010100000100100000110000100100000101100000110000100000000110100000110000011100000111100000110000011000001000100000110000010100000100110000011000001000000010101000001100000010000001100100000110000000100000110110000011
+# hexadecimal_number = decimal_to_hexadecimal(decimal_number)
+# # print(hexadecimal_number)  
+
+
+
+
+def binary_to_hex(binary_str):
+    # Ensure the binary string length is a multiple of 4
+    while len(binary_str) % 4 != 0:
+        binary_str = '0' + binary_str
+
+    # Convert each 4-bit chunk to its hexadecimal equivalent
+    hex_str = ''
+    for i in range(0, len(binary_str), 4):
+        chunk = binary_str[i:i+4]
+        hex_str += hex(int(chunk, 2))[2:]  # Remove the '0x' prefix
+
+    return hex_str.upper()
+
+binary_input = "10000010000011101000001100001110100000110000111010000011000011101000001100001110100000110000111010000011000011101000001100001110100000110000111010000011000011101000001100001110100000110000111010000011000011101000001100001110100000110000111010000010"
+hex_output = binary_to_hex(binary_input)
+# print(hex_output)
+
+def check():
+    hi = '820E830E830E830E830E830E830E830E830E830E830E830E830E830E830E82'
+    ye = '820E830E830E830E830E830E830E830E830E830E830E830E830E830E830E82'
+    return hi == ye
+
+# print(check())

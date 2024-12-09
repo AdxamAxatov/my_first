@@ -847,3 +847,63 @@ def check():
     return hi == ye
 
 # print(check())
+
+
+
+import math
+
+def permutation_ratio(n, r1, r2):
+  """
+  Calculates the ratio of permutations P(n, r1) / P(n, r2).
+
+  Args:
+    n: Total number of objects.
+    r1: Number of objects taken in the numerator.
+    r2: Number of objects taken in the denominator.
+
+  Returns:
+    The calculated ratio.
+  """
+
+  if r1 > n or r2 > n or r1 < r2:
+    raise ValueError("Invalid input: r1 must be less than or equal to n, r2 must be less than or equal to n, and r1 must be greater than or equal to r2.")
+
+  numerator = math.factorial(n) / math.factorial(n - r1)
+  denominator = math.factorial(n) / math.factorial(n - r2)
+
+  return numerator / denominator
+
+# Calculate the ratio for the given values
+# n = 100
+# r1 = 85
+# r2 = 83
+
+# ratio = permutation_ratio(n, r1, r2)
+# print(f"The ratio P({n},{r1}) / P({n},{r2}) is {int(ratio)}")
+
+
+
+
+def evaluate_expression(n, m):
+    """
+    Evaluates the expression (n! - m!) / m!
+
+    Args:
+        n (int): The larger factorial number.
+        m (int): The smaller factorial number.
+
+    Returns:
+        float: The evaluated result.
+    """
+
+    numerator = n * (n - 1)
+    denominator = m
+
+    result = numerator / denominator
+    return result
+
+# n = 56
+# m = 55
+
+# result = evaluate_expression(n, m)
+# print(f"The result is: {result:.2f}")

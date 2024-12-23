@@ -12,5 +12,124 @@ def binary_search(list, main_item):
             else:
                 high = mid - 1
 
-search = binary_search([1, 3, 5, 6, 8, 9, 12], 1)
-print(search)
+# search = binary_search([1, 3, 5, 6, 8, 9, 12], 1)
+# print(search)
+
+
+# Recap
+# • Binary search is a lot faster than simple search.
+# • O(log n) is faster than O(n), but it gets a lot faster once the list of
+# items you’re searching through grows.
+# • Algorithm speed isn’t measured in seconds.
+# • Algorithm times are measured in terms of growth of an algorithm.
+# • Algorithm times are written in Big O notation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

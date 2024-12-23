@@ -907,3 +907,342 @@ def evaluate_expression(n, m):
 
 # result = evaluate_expression(n, m)
 # print(f"The result is: {result:.2f}")
+
+
+
+
+from typing import Dict
+# from collections import defaultdict
+
+def combine_dicts(*args:Dict[str, int]) -> Dict[str, int]:           
+    # return dictt 
+    # result = defaultdict(int)    
+    result = {}
+    for d in args:
+        for key, value in d.items():
+            # result[key] += value    
+            result[key] = result.get(key, 0) + value
+
+    return dict(result)
+
+# dict_1 = {'a': 100, 'b': 200}
+# dict_2 = {'a': 200, 'c': 300}
+# dict_3 = {'a': 300, 'd': 100}
+
+# combined_dict = combine_dicts(dict_1, dict_2, dict_3)
+# print(combined_dict)  
+
+
+
+
+from numbers import Number
+from typing import Callable
+
+
+def operation_factory(operation: str) -> Callable[[Number, Number], Number]:
+    if operation == 'add':
+        return lambda a, b: a + b
+    elif operation == 'subtract':
+        return lambda a, b: a - b
+    elif operation =='multiply':
+        return lambda a, b: a * b
+    elif operation == 'divide':
+        return lambda a, b: a / b if b != 0 else ValueError("Division by zero") 
+
+def perform_operation(operation: str, a: Number, b: Number) -> Number:
+    return operation_factory(operation)(a, b)
+
+
+# print(perform_operation("multiply", 5, 3))
+# print(perform_operation("divide", 3, 0))
+# print(perform_operation("subtract", 5, 3))
+# print(perform_operation("add", 5, 3))
+
+
+
+# def sum_of_digits(num: int): 
+#     if num < 10:
+#         return num
+#     else:
+#         return num % 10 + sum_of_digits(num // 10)
+    
+
+# print(sum_of_digits(12345))
+
+
+
+
+
+def marshal(obj):
+    if isinstance(obj, int):
+        return f"i:{obj}"
+    elif isinstance(obj, bool):
+        return f"b:{str(obj).lower()}"  # Convert True/False to true/false
+    elif isinstance(obj, str):
+        return f"s:{obj}" 
+    elif isinstance(obj, list):
+        return f"l:[{','.join(marshal(item) for item in obj)}]" 
+    elif isinstance(obj, tuple): 
+        return f"t:({','.join(marshal(item) for item in obj)})" 
+    elif isinstance(obj, dict):
+        return f"d:{{{','.join(f'{marshal(key)}:{marshal(value)}' for key, value in obj.items())}}}" 
+    else:
+        raise TypeError(f"Unsupported type: {type(obj)}")
+    
+# print(marshal({"key": "value", "number": 123}))
+
+
+def unmarshal(serialized_obj):
+    if serialized_obj.startswith("i:"):
+        return int(serialized_obj[2:])
+    elif serialized_obj.startswith("b:"):
+        return serialized_obj[2:] == "true"
+    elif serialized_obj.startswith("s:"):
+        return serialized_obj[2:]
+    elif serialized_obj.startswith("l:"):
+        start = serialized_obj.find("[") + 1
+        end = serialized_obj.find("]")
+        return [unmarshal(item) for item in serialized_obj[start:end].split(",")]
+    elif serialized_obj.startswith("t:"):
+        start = serialized_obj.find("(") + 1
+        end = serialized_obj.find(")")
+        return tuple(unmarshal(item) for item in serialized_obj[start:end].split(","))
+    elif serialized_obj.startswith("d:"):
+        print(1)
+        start = serialized_obj.find("{") + 1
+        end = serialized_obj.find("}")
+        result = {}
+        pairs = serialized_obj[start:end].split(",") 
+        for pair in pairs:
+            key_end = pair.find(":")
+            key = unmarshal(pair[:key_end])
+            value = unmarshal(pair[key_end + 1:])
+            result[key] = value
+        return result
+    else:
+        raise ValueError("Invalid serialized object")
+    
+# print(unmarshal('i:42'))
+# print(unmarshal('d:{s:key:s:value,s:number:i:123}'))
+
+
+
+
+
+from typing import Any
+
+# Escape special characters in strings
+def escape_string(s: str) -> str:
+    return s.replace("\\", "\\\\").replace(":", "\\:").replace(",", "\\,")
+
+# Unescape special characters in strings
+def unescape_string(s: str) -> str:
+    return s.replace("\\,", ",").replace("\\:", ":").replace("\\\\", "\\")
+
+def marshal(obj: Any) -> str:
+    """Convert a Python data structure into a custom string format."""
+    if isinstance(obj, int):
+        return f"i:{obj}"
+    elif isinstance(obj, bool):
+        return f"b:{str(obj).lower()}"
+    elif isinstance(obj, str):
+        return f"s:{escape_string(obj)}"
+    elif isinstance(obj, list):
+        return f"l:[{','.join(marshal(item) for item in obj)}]"
+    elif isinstance(obj, tuple):
+        return f"t:({','.join(marshal(item) for item in obj)})"
+    elif isinstance(obj, dict):
+        return f"d:{{{','.join(f'{marshal(key)}:{marshal(value)}' for key, value in obj.items())}}}"
+    else:
+        raise TypeError(f"Unsupported type: {type(obj)}")
+
+def unmarshal(serialized_obj: str) -> Any:
+    """Parse the custom string format back into the original Python data structure."""
+    def parse_nested(data: str, start_char: str, end_char: str) -> list:
+        """Helper to parse nested structures like lists, tuples, or dicts."""
+        stack, result, current = [], [], ""
+        for char in data:
+            if char == start_char:
+                stack.append(char)
+                current += char
+            elif char == end_char:
+                stack.pop()
+                current += char
+            elif char == "," and not stack:
+                result.append(current)
+                current = ""
+            else:
+                current += char
+        if current:
+            result.append(current)
+        return result
+
+    if serialized_obj.startswith("i:"):
+        return int(serialized_obj[2:])
+    elif serialized_obj.startswith("b:"):
+        return serialized_obj[2:] == "true"
+    elif serialized_obj.startswith("s:"):
+        return unescape_string(serialized_obj[2:])
+    elif serialized_obj.startswith("l:"):
+        inner = serialized_obj[3:-1]  # Strip 'l:[' and ']'
+        if not inner:
+            return []
+        items = parse_nested(inner, "[", "]")
+        return [unmarshal(item) for item in items]
+    elif serialized_obj.startswith("t:"):
+        inner = serialized_obj[3:-1]  # Strip 't:(' and ')'
+        if not inner:
+            return ()
+        items = parse_nested(inner, "(", ")")
+        return tuple(unmarshal(item) for item in items)
+    elif serialized_obj.startswith("d:"):
+        inner = serialized_obj[3:-1]  # Strip 'd:{' and '}'
+        if not inner:
+            return {}
+        pairs = parse_nested(inner, "{", "}")
+        result = {}
+        for pair in pairs:
+            # Find the key-value delimiter safely
+            key, value = split_key_value(pair)
+            result[unmarshal(key)] = unmarshal(value)
+        return result
+    else:
+        raise ValueError(f"Invalid serialized object: {serialized_obj}")
+
+def split_key_value(pair: str) -> tuple:
+    """Safely split a key-value pair at the correct colon."""
+    stack = 0
+    for i, char in enumerate(pair):
+        if char in "{[(":
+            stack += 1
+        elif char in "}])":
+            stack -= 1
+        elif char == ":" and stack == 0:
+            return pair[:i], pair[i + 1:]
+    raise ValueError(f"Malformed key-value pair: {pair}")
+
+
+# print(unmarshal('d:{s:key:s:value,s:number:i:123}'))
+# print(unmarshal('i:42'))
+
+
+
+from numbers import Number
+from typing import Dict, Union, List, Any
+
+# Type aliases
+RawDataRecord = Dict[Any, Union[Number, str, None]]
+FilteredDataRecord = Dict[Any, Union[Number, str]]
+
+
+def temp_map(mapped_data):
+    """Convert all 'value' fields to float, setting to 0 if conversion fails."""
+    result = []
+    for record in mapped_data:
+        new_record = record.copy()  # Avoid modifying input
+        try:
+            new_record["value"] = float(str(new_record["value"]).strip())
+        except (ValueError, TypeError):
+            new_record["value"] = 0
+        result.append(new_record)
+    return result
+
+
+def temp_filter(raw_data):
+    """Filter records where 'metric' is 'temp' and 'value' is valid."""
+    filtered_data = []
+    for record in raw_data:
+        # Ensure 'metric' is 'temp' and 'value' exists
+        if record.get("metric") == "temp" and record.get("value") is not None:
+            try:
+                float(str(record["value"]).strip())  # Ensure value is numeric
+                filtered_data.append(record)
+            except (ValueError, TypeError):
+                continue
+    return filtered_data
+
+
+def temp_reduce(mapped_data, default: Number) -> Number:
+    """Calculate the average temperature from mapped data."""
+    total = 0
+    count = 0
+    for record in mapped_data:
+        total += record["value"]
+        count += 1
+    return total / count if count > 0 else default
+
+
+def validate_and_calculate(raw_data, default: Number = 0) -> Number:
+    """
+    Process raw data:
+    1. Filter invalid records.
+    2. Map 'value' to float.
+    3. Reduce to calculate average temperature.
+    """
+    return temp_reduce(temp_map(temp_filter(raw_data)), default)
+
+
+
+raw_data = [
+    {"key": 1, "timestamp": 1234567, "metric": "temp", "value": "+12"},
+    {"key": 2, "timestamp": None, "metric": "temp", "value": "+10"},
+    {"key": 3, "timestamp": 1234569, "metric": "temp", "value": 11},
+    {"key": "4", "timestamp": 1234570, "metric": "", "value": "88"},
+]
+print(validate_and_calculate(raw_data))  
+
+
+
+
+from numbers import Number
+from typing import Dict, Union, List, Any
+
+
+RawDataRecord = Dict[Any, Union[Number, str, None]]
+FilteredDataRecord = Dict[Any, Union[Number, str]]
+
+
+def temp_map(mapped_data):
+    """Convert all 'value' fields to float, setting to 0 if conversion fails."""
+    for record in mapped_data:
+        try:
+            record["value"] = float(record["value"])
+        except (ValueError, TypeError):
+            record["value"] = 0
+    return mapped_data
+
+
+def temp_filter(raw_data):
+    """Filter records where 'metric' is 'temp' and 'value' is valid."""
+    filtered_data = []
+    for record in raw_data:        
+        if record.get("metric") == "temp" and record.get("value") is not None:
+            try:
+                float(record["value"])  
+                filtered_data.append(record)
+            except (ValueError, TypeError):
+                continue
+    return filtered_data
+
+
+def temp_reduce(mapped_data, default: Number):
+    """Calculate the average temperature from mapped data."""
+    total = 0
+    count = 0
+    for record in mapped_data:
+        total += record["value"]
+        count += 1
+    return total / count if count > 0 else default
+
+
+def validate_and_calculate(raw_data, default: Number = 0) -> Number:
+    return temp_reduce(temp_map(temp_filter(raw_data)), default)
+
+
+raw_data = [
+    {"key": 1, "timestamp": 1234567, "metric": "temp", "value": "+12"},
+    {"key": 2, "timestamp": None, "metric": "temp", "value": "+10"},
+    {"key": 3, "timestamp": 1234569, "metric": "temp", "value": 11},
+    {"key": "4", "timestamp": 1234570, "metric": "", "value": "88"},
+]
+print(validate_and_calculate(raw_data)) 

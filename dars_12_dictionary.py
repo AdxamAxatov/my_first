@@ -369,8 +369,6 @@ for i in range(1):
 a.append(countries)
 # print(a)
 
-# for i in countries
-
 
 
 

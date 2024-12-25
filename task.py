@@ -1237,9 +1237,361 @@ raw_data = [
 
 
 
+def temp_filter(raw_data):
+    """ Filter out records with invalid timestamp or metric """
+    return [record for record in raw_data if record['timestamp'] is not None and record['metric'] == 'temp']
+
+def temp_map(filtered_data):
+    """ Convert the value field to an integer """
+    mapped_data = []
+    for record in filtered_data:
+        try:
+            record['value'] = int(record['value'])
+            mapped_data.append(record)
+        except ValueError:
+            continue
+    return mapped_data
+
+def temp_reduce(mapped_data, initial_value):
+    """ Calculate the average of the value fields """
+    if not mapped_data:
+        return 0
+    total = sum(record['value'] for record in mapped_data)
+    return total / len(mapped_data)
+
+def validate_and_calculate(raw_data):
+    """ Make data set consistent - convert all values into one type, remove record if conversion is not possible. And calculate average temp  """
+    return temp_reduce(temp_map(temp_filter(raw_data)), 0)
+
+# Example usage
+raw_data = [
+    {"key": 1, "timestamp": 1234567, "metric": "temp", "value": "+12"},
+    {"key": 2, "timestamp": None, "metric": "temp", "value": "+10"},
+    {"key": 3, "timestamp": 1234569, "metric": "temp", "value": 11},
+    {"key": "4", "timestamp": 1234570, "metric": "", "value": "88"},
+]
+
+# print(validate_and_calculate(raw_data))  # Output: 11.5
+
+
+
+
+def temp_filter_and_map(raw_data):
+    """ Filter out records with invalid timestamp or metric and convert the value field to an integer """
+    filtered_mapped_data = []
+    for record in raw_data:
+        if record['timestamp'] is not None and record['metric'] == 'temp':
+            try:
+                record['value'] = int(record['value'])
+                filtered_mapped_data.append(record)
+            except (ValueError, TypeError):
+                continue
+    return filtered_mapped_data
+
+def temp_reduce(mapped_data, initial_value):
+    """ Calculate the average of the value fields """
+    if not mapped_data:
+        return 0
+    total = sum(record['value'] for record in mapped_data)
+    return total / len(mapped_data)
+
+def validate_and_calculate(raw_data):
+    """ Make data set consistent - convert all values into one type, remove record if conversion is not possible. And calculate average temp  """
+    return temp_reduce(temp_filter_and_map(raw_data), 0)
+
+# Example usage
+raw_data = [
+    {"key": 1, "timestamp": 1234567, "metric": "temp", "value": "+12"},
+    {"key": 2, "timestamp": None, "metric": "temp", "value": "+10"},
+    {"key": 3, "timestamp": 1234569, "metric": "temp", "value": 11},
+    {"key": "4", "timestamp": 1234570, "metric": "", "value": "88"},
+]
+
+# print(validate_and_calculate(raw_data))  # Output: 11.5
+
+
+
+
+
+def is_valid_file_system(fs: dict) -> bool:
+    def validate_node(node):
+        if not isinstance(node, dict):
+            return False
+        if 'owner' not in node or 'access' not in node:
+            return False
+        if not isinstance(node['owner'], str):
+            return False
+        if not isinstance(node['access'], list) or not all(isinstance(perm, str) for perm in node['access']):
+            return False
+        if 'contents' in node:
+            if not isinstance(node['contents'], dict):
+                return False
+            for sub_node in node['contents'].values():
+                if not validate_node(sub_node):
+                    return False
+        return True
+
+    return validate_node(fs)
+
+# Example usage
+file_system = {
+    "root": {
+        "owner": "admin",
+        "access": ["read", "write", "execute"],
+        "contents": {
+            "folder1": {
+                "owner": "admin",
+                "access": ["read", "write"],
+                "contents": {
+                    "subfolder1": {
+                        "owner": "user1",
+                        "access": ["read", "write"],
+                        "contents": {
+                            "file1.txt": {
+                                "owner": "user1",
+                                "access": ["read", "write"]
+                            }
+                        }
+                    }
+                }
+            },
+            "file0.txt": {
+                "owner": "user1",
+                "access": ["read", "write"]
+            }
+        }
+    }
+}
+
+# print(is_valid_file_system(file_system))  # Output: True
+
+
+
+
+def change_owner(fs: dict, path: str, new_owner: str) -> int:
+    def find_node(node, path_parts):
+        if not path_parts:
+            return node
+        if 'contents' not in node:
+            return None
+        next_node = node['contents'].get(path_parts[0])
+        if not next_node:
+            return None
+        return find_node(next_node, path_parts[1:])
+
+    def update_owner(node, new_owner):
+        node['owner'] = new_owner
+        if 'contents' in node:
+            for sub_node in node['contents'].values():
+                update_owner(sub_node, new_owner)
+
+    path_parts = path.split('/')
+    target_node = find_node(fs, path_parts)
+    if not target_node:
+        return 1
+    if not is_valid_file_system(target_node):
+        return 2
+    update_owner(target_node, new_owner)
+    return 0
+
+# Example usage
+# print(change_owner(file_system, "root/folder1", "new_admin"))  # Output: 0
+# print(file_system["root"]["contents"]["folder1"]["owner"])  # Output: "new_admin"
+
+
+
+def change_permissions(fs: dict, path: str, mode: int, *permissions: str) -> int:
+    if mode not in [1, -1]:
+        return 3
+    valid_permissions = {"read", "write", "execute"}
+    if not all(perm in valid_permissions for perm in permissions):
+        return 4
+
+    def find_node(node, path_parts):
+        if not path_parts:
+            return node
+        if 'contents' not in node:
+            return None
+        next_node = node['contents'].get(path_parts[0])
+        if not next_node:
+            return None
+        return find_node(next_node, path_parts[1:])
+
+    def update_permissions(node, mode, permissions):
+        if mode == 1:
+            node['access'] = list(set(node['access']).union(permissions))
+        elif mode == -1:
+            node['access'] = list(set(node['access']).difference(permissions))
+        if 'contents' in node:
+            for sub_node in node['contents'].values():
+                update_permissions(sub_node, mode, permissions)
+
+    path_parts = path.split('/')
+    target_node = find_node(fs, path_parts)
+    if not target_node:
+        return 1
+    if not is_valid_file_system(target_node):
+        return 2
+    update_permissions(target_node, mode, permissions)
+    return 0
+
+# # Example usage
+# print(change_permissions(file_system, "root/folder1/subfolder1/file1.txt", 1, "execute"))  # Output: 0
+# print(file_system["root"]["contents"]["folder1"]["contents"]["subfolder1"]["contents"]["file1.txt"]["access"])  # Output: ['read', 'write', 'execute']
+# print(change_permissions(file_system, "root/folder1/subfolder1/file1.txt", 3, "execute"))  # Output: 3
+
+
+
+
+
+def marshal(obj: Any) -> str:
+    if isinstance(obj, int):
+        return f"i:{obj}"
+    elif isinstance(obj, bool):
+        return f"b:{str(obj).lower()}"
+    elif isinstance(obj, str):
+        return f"s:{obj}"
+    elif isinstance(obj, list):
+        return f"l:[{','.join(marshal(item) for item in obj)}]"
+    elif isinstance(obj, tuple):
+        return f"t:({','.join(marshal(item) for item in obj)})"
+    elif isinstance(obj, dict):
+        items = [f"{marshal(key)}:{marshal(value)}" for key, value in obj.items()]
+        return f"d:{{{','.join(items)}}}"
+    else:
+        raise TypeError("Unsupported data type")
+
+# Example usage
+# print(marshal(42))  # Output: 'i:42'
+# print(marshal({"key": "value", "number": 123}))  # Output: 'd:{s:key:s:value,s:number:i:123}'
+
+
+
+
+def unmarshal(serialized_obj: str) -> Any:
+    def parse_value(value: str):
+        if value.startswith("i:"):
+            return int(value[2:])
+        elif value.startswith("b:"):
+            return value[2:] == "true"
+        elif value.startswith("s:"):
+            return value[2:]
+        elif value.startswith("l:["):
+            return parse_list(value[3:-1])
+        elif value.startswith("t:("):
+            return parse_tuple(value[3:-1])
+        elif value.startswith("d:{"):
+            return parse_dict(value[3:-1])
+        else:
+            raise ValueError("Unsupported data type")
+
+    def parse_list(value: str):
+        items = split_items(value)
+        return [parse_value(item) for item in items]
+
+    def parse_tuple(value: str):
+        items = split_items(value)
+        return tuple(parse_value(item) for item in items)
+
+    def parse_dict(value: str):
+        items = split_items(value)
+        return {parse_value(k): parse_value(v) for k, v in (item.split(":", 1) for item in items)}
+
+    def split_items(value: str):
+        items = []
+        bracket_count = 0
+        current_item = []
+        for char in value:
+            if char in "[{(":
+                bracket_count += 1
+            elif char in "]})":
+                bracket_count -= 1
+            if char == "," and bracket_count == 0:
+                items.append("".join(current_item))
+                current_item = []
+            else:
+                current_item.append(char)
+        if current_item:
+            items.append("".join(current_item))
+        return items
+
+    return parse_value(serialized_obj)
+
+# # Example usage
+# print(unmarshal('i:42'))  # Output: 42
+# print(unmarshal('d:{s:key:s:value,s:number:i:123}'))  # Output: {'key': 'value', 'number': 123}``
 
 
 
 
 
 
+def count_target(number: int, target: int) -> int:
+    number = abs(number)
+    if number == 0:
+        return 0
+    else:
+        if number % 10 == target:
+            return 1 + count_target(number // 10, target)
+        else:
+            return count_target(number // 10, target)
+
+# print(count_target(717, 7))  
+# print(count_target(7, 1))    
+# print(count_target(123, 1)) 
+# print(717 % 10)
+# print(717 // 10)
+
+
+def add_word(s: str) -> str:
+    if len(s) <= 1:
+       return s
+    else:
+        if s[0] == s[1]:
+            return s[0] + ' and ' + add_word(s[1:])
+        else:
+            return s[0] + add_word(s[1:])
+
+# print(add_word('hello'))
+# print(add_word("xxyy"))
+# print(add_word("aaaa"))
+
+
+
+from typing import List, Tuple, Union
+
+
+def seq_sum(sequence: Union[List, Tuple]) -> int:
+    """
+    Add your code here or call it from here   
+    """
+    if not sequence:
+        return 0
+    else:
+        first, rest = sequence[0], sequence[1:]
+        if isinstance(first, (list, tuple)):
+            return seq_sum(first) + seq_sum(rest)
+        else:
+            return first + seq_sum(rest) 
+
+# sequence = [1,2,3,[4,5, (6,7)]]
+# print(seq_sum(sequence))
+
+
+
+from typing import Any, List
+
+def linear_seq(sequence: List[Any]) -> List[Any]:
+    """
+    Add your code here or call it from here   
+    """
+    result = []
+    for element in sequence:
+        if isinstance(element, (list, tuple)):
+            result.extend(linear_seq(element))
+        else:
+            result.append(element)
+    return result
+
+# sequence = [1, 2, 3, [4, 5, (6, 7)]]
+# print(linear_seq(sequence))

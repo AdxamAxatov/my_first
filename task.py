@@ -1095,32 +1095,19 @@ def unmarshal(serialized_obj: str) -> Any:
             return ()
         items = parse_nested(inner, "(", ")")
         return tuple(unmarshal(item) for item in items)
-    elif serialized_obj.startswith("d:"):
-        inner = serialized_obj[3:-1]  # Strip 'd:{' and '}'
-        if not inner:
-            return {}
-        pairs = parse_nested(inner, "{", "}")
-        result = {}
-        for pair in pairs:
-            # Find the key-value delimiter safely
-            key, value = split_key_value(pair)
-            result[unmarshal(key)] = unmarshal(value)
-        return result
-    else:
-        raise ValueError(f"Invalid serialized object: {serialized_obj}")
-
-def split_key_value(pair: str) -> tuple:
-    """Safely split a key-value pair at the correct colon."""
-    stack = 0
-    for i, char in enumerate(pair):
-        if char in "{[(":
-            stack += 1
-        elif char in "}])":
-            stack -= 1
-        elif char == ":" and stack == 0:
-            return pair[:i], pair[i + 1:]
-    raise ValueError(f"Malformed key-value pair: {pair}")
-
+    # elif serialized_obj.startswith("d:"):
+    #     inner = serialized_obj[3:-1]  # Strip 'd:{' and '}'
+    #     if not inner:
+    #         return {}
+    #     pairs = parse_nested(inner, "{", "}")
+    #     result = {}
+    #     for pair in pairs:
+    #         # Find the key-value delimiter safely
+    #         key, value = split_key_value(pair)
+    #         result[unmarshal(key)] = unmarshal(value)
+    #     return result
+    # else:
+    #     raise ValueError(f"Invalid serialized object: {serialized_obj}")
 
 # print(unmarshal('d:{s:key:s:value,s:number:i:123}'))
 # print(unmarshal('i:42'))
@@ -1189,7 +1176,7 @@ raw_data = [
     {"key": 3, "timestamp": 1234569, "metric": "temp", "value": 11},
     {"key": "4", "timestamp": 1234570, "metric": "", "value": "88"},
 ]
-print(validate_and_calculate(raw_data))  
+# print(validate_and_calculate(raw_data))  
 
 
 
@@ -1245,4 +1232,14 @@ raw_data = [
     {"key": 3, "timestamp": 1234569, "metric": "temp", "value": 11},
     {"key": "4", "timestamp": 1234570, "metric": "", "value": "88"},
 ]
-print(validate_and_calculate(raw_data)) 
+# print(validate_and_calculate(raw_data)) 
+
+
+
+
+
+
+
+
+
+
